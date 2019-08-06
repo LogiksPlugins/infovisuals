@@ -1,0 +1,64 @@
+.infovisuals-tools {
+    padding: 7px;
+    padding-bottom: 0px;
+}
+
+.infovisualsContainer {
+    padding: 5px;
+}
+.infovisualsContainer .infovisualBox {
+    padding: 2px;
+}
+.infovisualsContainer .infovisualBox .infovisualCard {
+	margin-bottom: 0px;
+}
+.infovisualsContainer .infovisualBox .infovisualCard .panel-body {
+	padding: 0px;
+}
+
+
+
+.infovisualsContainer .infovisualBox .infovisualCard .panel-body pre {
+    margin: 0px;
+    background: white;
+}
+
+.infovisualsContainer .infovisualBox .infovisualCard .panel-body p {
+    padding: 10px;
+    margin: 0px;
+}
+
+
+
+
+
+
+
+
+
+.nopadding {
+    padding: 0px;
+}
+.onlyprint {
+    display: none !important;
+}
+
+@media print
+{    
+    .noprint, .noprint *
+    {
+        display: none !important;
+    }
+    .onlyprint
+    {
+        display: inline !important;
+    }
+
+    table.dataTable {
+        border:1px solid #AAA;
+    }
+
+    table.dataTable tbody td {
+        border-right: 1px solid #AAA;
+    }
+}
