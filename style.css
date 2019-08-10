@@ -1,3 +1,13 @@
+canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.infovisuals-main-container {
+    padding: 0px;
+}
+
 .infovisuals-tools {
     padding: 7px;
     padding-bottom: 0px;
@@ -9,13 +19,19 @@
 .infovisualsContainer .infovisualBox {
     padding: 2px;
 }
+.infovisualsContainer .infovisualBox * {
+    cursor: default;
+}
+
 .infovisualsContainer .infovisualBox .infovisualCard {
 	margin-bottom: 0px;
 }
 .infovisualsContainer .infovisualBox .infovisualCard .panel-body {
 	padding: 0px;
 }
-
+.infovisualsContainer .infovisualBox .card-toolbar {
+    margin-right: -5px;
+}
 
 
 .infovisualsContainer .infovisualBox .infovisualCard .panel-body pre {
@@ -29,20 +45,78 @@
 }
 
 
+.infovisualsContainer .infovisualBox .infovisualCard caption {
+    padding-left: 8px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #9999;
+}
+.infovisualsContainer .infovisualBox .infovisualCard .actionCol i {
+    margin: 5px;
+}
+.infovisualsContainer .infovisualBox .infovisualCard .actionCol {
+    text-align: right;
+}
+.infovisualsContainer .infovisualBox .infovisualCard .list-actionCol {
+    margin: -10px;
+}
+.infovisualsContainer .infovisualBox .btn-cardtool {
+    margin-top: -5px;
+    padding: 6px 6px;
+}
+.infovisualsContainer .infovisualBox .card-list-group {
+    overflow: auto;
+}
+
+.infovisualsContainer .infovisualBox  .list-group-item-heading {
+    font-weight: bold;
+}
+.infovisualsContainer .infovisualBox .tags {
+    font-size: 10px;
+    text-align: left;
+    margin-left: -5px;
+}
+.infovisualsContainer .infovisualBox .tags .label {
+    margin: 1px;
+}
+.infovisualsContainer .infovisualBox .card-content {
+    padding: 5px;
+}
+.infovisualsContainer .infovisualBox .card-content .card-content-box {
+    padding: 2px;
+    border-bottom: 1px solid #CDCDCD;
+}
 
 
+.infovisualsContainer .infovisualBox .card-images img {
+    max-width: 100%;
+    max-height: 100%;
+}
+.infovisualsContainer .infovisualBox .card-images .carousel-inner {
+    height: 100%;
+    text-align: center;
+}
+.infovisualsContainer .infovisualBox .card-images .thumbnail {
+    height: 30%;
+    overflow: hidden;
+    vertical-align: middle;
+}
 
-
-
-
-
+.actionCMD {
+    cursor: pointer;
+}
 .nopadding {
-    padding: 0px;
+    padding: 0px !important;
 }
 .onlyprint {
     display: none !important;
 }
-
+.newRowLeft {
+    clear: left;
+}
+.newRowRight {
+    clear: right;
+}
 @media print
 {    
     .noprint, .noprint *

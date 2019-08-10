@@ -1,0 +1,237 @@
+{
+	"schema": "1.0",
+	"type":"infovisuals",
+	"title": "Example 2",
+	"category": "personal",
+	"privilege": "*",
+	"blocked": false,
+	"custombar": false,
+	"hooks": {
+		
+	},
+	"actions": {
+		"forms@errands/new": {
+			"label": "New Errand",
+			"icon": "fa fa-plus",
+			"class": "btn btn-info"
+		}
+	},
+    "buttons":{
+       "infoview@errands/{hashid}": {
+			"label": "View Errands",
+			"icon": "fa fa-eye",
+			"class": "leads-lead"
+		},
+       "forms@errands/edit/{hashid}": {
+			"label": "Edit Errand",
+			"icon": "fa fa-pencil"
+		}
+    },
+	"cards":[
+	    {
+        	"type": "charts_line",
+        	"js":"charts",
+        	"source": [{
+        	    "title": "By Type",
+        		"type": "sql",
+        		"fill": false,
+        		"charttype":"line",
+        		"steppedLine":true,
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, count(*) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	},{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, (count(*)+10) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	}]
+        },
+        {
+        	"type": "charts_doughnut",
+        	"js":"charts",
+        	"source": [{
+        	    "title": "Type Pie",
+        		"type": "sql",
+        		"fill": false,
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, count(*) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	}]
+        },
+        {
+        	"type": "charts_hbar",
+        	"js":"charts",
+        	"stacked":true,
+        	"source": [{
+        	    "title": "By Type",
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, count(*) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	},{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, (count(*)+10) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	}]
+        },
+        {
+        	"type": "data_grid",
+        	"column":6,
+        	"title":"Grid Data Sample",
+        	"actions": {
+        	    "forms@profile.company/new": {
+        			"label": "Add Group",
+        			"icon": "fa fa-plus",
+        			"class": "btn btn-info"
+        		},
+        		"forms@profile.main/new": {
+        			"label": "Add Business",
+        			"icon": "fa fa-minus"
+        		},
+        		"forms@profile.addressbook/new": {
+        			"label": "Add Contact",
+        			"icon": "fa fa-user"
+        		}
+        	},
+        	"source": [{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.id as id, profiletbl.type, count(*) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type",
+        		"footer":{
+        		    "type":"Total",
+        		    "value":"math:count"
+        		},
+        		"hidden":["id"],
+        		"buttons":{
+        		    "infoview@profile.main/{hashid}": {
+            			"label":"View Business",
+            			"icon":"fa fa-eye",
+            			"class":"profile-customers"
+            		},
+            		"forms@profile.main/edit/{hashid}": {
+            			"label": "Edit Business",
+            			"icon": "fa fa-pencil",
+            			"class": "profile-customers"
+            		},
+            		"forms@profile.business/edit/{hashid}": {
+            			"label": "Edit Biz info",
+            			"icon": "fa fa-industry",
+            			"class": "business"
+            		}
+        		}
+        	}]
+        },
+        {
+        	"type": "data_list",
+        	"column":2,
+        	"title":"List Data Sample 1",
+        	"actions": {
+        		"forms@profile.main/new": {
+        			"label": "Add Business",
+        			"icon": "fa fa-plus"
+        		},
+        		"forms@profile.addressbook/new": {
+        			"label": "Add Contact",
+        			"icon": "fa fa-user"
+        		}
+        	},
+        	"source": [{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.id as id, profiletbl.type as title, count(*) as value, full_name as text, category as tags",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type",
+        		"template":"<h1>{title}</h1><p>{text}</p>",
+        		"buttons":{
+        		    "infoview@profile.main/{hashid}": {
+            			"label":"View Business",
+            			"icon":"fa fa-eye",
+            			"class":"profile-customers"
+            		},
+            		"forms@profile.main/edit/{hashid}": {
+            			"label": "Edit Business",
+            			"icon": "fa fa-pencil",
+            			"class": "profile-customers"
+            		},
+            		"forms@profile.business/edit/{hashid}": {
+            			"label": "Edit Biz info",
+            			"icon": "fa fa-industry",
+            			"class": "business"
+            		}
+        		}
+        	}]
+        },
+        {
+        	"type": "data_list",
+        	"column":2,
+        	"title":"List Data Sample 2",
+        	"actions": {
+        		"forms@profile.main/new": {
+        			"label": "Add Business",
+        			"icon": "fa fa-plus"
+        		},
+        		"forms@profile.addressbook/new": {
+        			"label": "Add Contact",
+        			"icon": "fa fa-user"
+        		}
+        	},
+        	"source": [{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.id as id, profiletbl.type as title, count(*) as value, full_name as text, category as tags",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type",
+        		"buttons":{
+        		    "infoview@profile.main/{hashid}": {
+            			"label":"View Business",
+            			"icon":"fa fa-eye",
+            			"class":"profile-customers"
+            		},
+            		"forms@profile.main/edit/{hashid}": {
+            			"label": "Edit Business",
+            			"icon": "fa fa-pencil",
+            			"class": "profile-customers"
+            		},
+            		"forms@profile.business/edit/{hashid}": {
+            			"label": "Edit Biz info",
+            			"icon": "fa fa-industry",
+            			"class": "business"
+            		}
+        		}
+        	}]
+        }
+    ]
+}

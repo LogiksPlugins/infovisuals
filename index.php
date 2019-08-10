@@ -17,7 +17,6 @@ if(isset($_REQUEST['src']) && strlen($_REQUEST['src'])>0) {
 	if($report) {
 		$report['template']=$template;
 		
-		
 		echo "<div class='infovisualsHolder'>";//style='width:100%;height:100%;overflow-x: hidden;'
 		printInfovisual($report,$report['dbkey']);
 		echo "</div>";

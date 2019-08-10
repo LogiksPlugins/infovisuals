@@ -1,0 +1,42 @@
+{
+	"schema": "1.0",
+	"type":"infovisuals",
+	"title": "Example 3",
+	"category": "personal",
+	"privilege": "*",
+	"blocked": false,
+	"custombar": false,
+	"hooks": {
+		
+	},
+	"actions": {
+		"forms@errands/new": {
+			"label": "New Errand",
+			"icon": "fa fa-plus",
+			"class": "btn btn-info"
+		}
+	},
+    "buttons":{
+       "infoview@errands/{hashid}": {
+			"label": "View Errands",
+			"icon": "fa fa-eye",
+			"class": "leads-lead"
+		},
+       "forms@errands/edit/{hashid}": {
+			"label": "Edit Errand",
+			"icon": "fa fa-pencil"
+		}
+    },
+	"cards":[
+        {
+        	"type": "maps_vector",
+        	"column":4,
+        	"title":"MAPS Vector"
+        },
+        {
+        	"type": "maps_google",
+        	"column":4,
+        	"title":"MAPS Google"
+        }
+    ]
+}

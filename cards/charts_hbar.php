@@ -12,7 +12,6 @@ if($recordSet) {
 		$source = $cardConfig['source'][$kn];
 
 		if(!isset($source['fill'])) $source['fill'] = false;
-		if(!isset($source['steppedLine'])) $source['steppedLine'] = false;
 
 		if(!isset($source['title'])) {
 			$source['title'] = "Dataset {$kn}";
@@ -26,7 +25,6 @@ if($recordSet) {
 					// "type" => 'bar',
 					"backgroundColor"=>$colorArr[$colorKeys[$kn]],
 					"borderColor"=>$colorArr[$colorKeys[$kn]],
-					"steppedLine"=>$source['steppedLine'],
 				];
 		if(isset($source['charttype']) && strlen($source['charttype'])>0) {
 			$finalData[$kn]['type'] = $source['charttype'];
@@ -89,8 +87,23 @@ if($recordSet) {
 		}
 	}
 
+	if(isset($cardConfig['stacked']) && $cardConfig['stacked']) {
+		if(!isset($cardConfig['options']['scales'])) {
+			$cardConfig['options']['scales'] = [];
+		}
+
+		if(!isset($cardConfig['options']['scales']['xAxes'])) $cardConfig['options']['scales']['xAxes'] = [];
+		if(!isset($cardConfig['options']['scales']['yAxes'])) $cardConfig['options']['scales']['yAxes'] = [];
+
+		if(!isset($cardConfig['options']['scales']['xAxes'][0])) $cardConfig['options']['scales']['xAxes'][0] = [];
+		if(!isset($cardConfig['options']['scales']['yAxes'][0])) $cardConfig['options']['scales']['yAxes'][0] = [];
+
+		if(!isset($cardConfig['options']['scales']['xAxes'][0]['stacked'])) $cardConfig['options']['scales']['xAxes'][0]['stacked'] = true;
+		if(!isset($cardConfig['options']['scales']['yAxes'][0]['stacked'])) $cardConfig['options']['scales']['yAxes'][0]['stacked'] = true;
+	}
+
 	$chartData = [
-				"type"=>"line",
+				"type"=>"bar",
 				"options"=>$cardConfig['options'],
 				"labels"=>array_unique($labels),
 				"datasets"=>$finalData
@@ -101,6 +114,7 @@ if($recordSet) {
 }
 
 $chartID = md5(rand().time());
+if(!isset($cardConfig['height'])) $cardConfig['height'] = "300px";
 ?>
 <div id='reportChart-<?=$chartID?>' class='col-xs-12 col-sm-12 col-md-12 col-lg-12 chartArea nopadding' style='height:<?=$cardConfig['height']?>'>
 	<canvas id="canvas-<?=$chartID?>" class='reportChartCanvas' style="width: 100%;height: 100%;"></canvas>
@@ -109,7 +123,7 @@ $chartID = md5(rand().time());
 $(function() {
 	jsonData = <?=json_encode($chartData)?>;
 	config = {
-		type: "line",
+		type: "horizontalBar",
 
 		data: {
 			labels: [],

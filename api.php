@@ -131,21 +131,39 @@ if(!function_exists("findInfovisual")) {
 					}
 				}
 				
-				echo _css('infovisuals');
-				if(isset($infovisualConfig['style']) && strlen($infovisualConfig['style'])>0) {
-					echo _css(["reports/{$infovisualConfig['style']}",$infovisualConfig['style']]);
+				$preoadJS = ['jquery.cookie', 'moment','infovisuals'];//"filesaver","html2canvas"
+				$preoadCSS = ['infovisuals'];
+
+				if(isset($infovisualConfig['cards'])) {
+					foreach ($infovisualConfig['cards'] as $cardKey => $cardConfig) {
+						if(isset($cardConfig['js'])) {
+							if(is_string($cardConfig['js'])) $cardConfig['js'] = explode(",", $cardConfig['js']);
+							$preoadJS = array_merge($preoadJS, $cardConfig['js']);
+						}
+						if(isset($cardConfig['css'])) {
+							if(is_string($cardConfig['css'])) $cardConfig['css'] = explode(",", $cardConfig['css']);
+							$preoadCSS = array_merge($preoadCSS, $cardConfig['css']);
+						}
+					}
 				}
-				echo "<div class='row'>";
+
+				if(isset($infovisualConfig['style']) && strlen($infovisualConfig['style'])>0) {
+					$preoadCSS = array_merge($preoadCSS, ["reports/{$infovisualConfig['style']}",$infovisualConfig['style']]);
+				}
+				if(isset($infovisualConfig['script']) && strlen($infovisualConfig['script'])>0) {
+					$preoadJS = array_merge($preoadJS, ["reports/{$infovisualConfig['script']}",$infovisualConfig['script']]);
+				}
+
+				echo _css(array_unique($preoadCSS));
+
+				echo "<div class='infovisuals-container clearfix nopadding'>";
 
 				include_once $f;
 
 				echo "</div>";
 
-				echo _js(['jquery.cookie', 'moment','infovisuals']);
-				//echo _js(["filesaver","html2canvas",,"infovisuals"]);
-				if(isset($infovisualConfig['script']) && strlen($infovisualConfig['script'])>0) {
-					echo _js(["reports/{$infovisualConfig['script']}",$infovisualConfig['script']]);
-				}
+				echo _js(array_unique($preoadJS));
+				
 
 				return true;
 			}
@@ -174,13 +192,17 @@ if(!function_exists("findInfovisual")) {
 				"header"=>false,
 				"footer"=>false,
 				"active"=>true,
+				"newrow"=>false,
 
 				"containerClass"=>"",
 			],$cardConfig);
 
 		// printArray($cardConfig);
+		if($cardConfig['newrow']) {
+			$cardConfig['containerClass'] = trim($cardConfig['containerClass'])." newRowLeft";
+		}
 
-		$html = "<div id='ivk{$cardKey}' class='infovisualBox col-xs-12 col-sm-{$cardConfig['column_small']} col-md-{$cardConfig['column']} col-lg-{$cardConfig['column_large']}'  data-ivcardkey='{$cardKey}' data-ivkey='{$infovisualkey}'>";
+		$html = "<div id='ivk{$cardKey}' class='infovisualBox col-xs-12 col-sm-{$cardConfig['column_small']} col-md-{$cardConfig['column']} col-lg-{$cardConfig['column_large']} {$cardConfig['containerClass']}'  data-ivcardkey='{$cardKey}' data-ivkey='{$infovisualkey}'>";
 
 		$html .= "<div class='panel panel-default infovisualCard'>";
 
@@ -192,12 +214,24 @@ if(!function_exists("findInfovisual")) {
 					include_once __DIR__."/comps/{$cardConfig['header']}.php";
 				} elseif(!is_numeric($cardConfig['header']) && strlen($cardConfig['header'])>0) {
 					$html .= "<div class='panel-heading'>";
+
+					if(isset($cardConfig['actions']) && is_array($cardConfig['actions']) && count($cardConfig['actions'])>0) {
+
+					}
+
 					$html .= $cardConfig['header'];
 					$html .= "</div>";	
 				}
 			} elseif(strlen($cardConfig['title'])>0) {
 				$html .= "<div class='panel-heading'>";
-				$html .= "<h3 class='panel-title'>Panel title</h3>";
+
+				if(isset($cardConfig['actions']) && is_array($cardConfig['actions']) && count($cardConfig['actions'])>0) {
+					$html .= "<div class='pull-right card-toolbar'>";
+					$html .= createInfovisualCardButtons($cardConfig);
+					$html .= "</div>";
+				}
+
+				$html .= "<h3 class='panel-title'>{$cardConfig['title']}</h3>";
 				$html .= "</div>";
 			}
 		}
@@ -224,6 +258,29 @@ if(!function_exists("findInfovisual")) {
 	}
 
 	function printInfovisualCard($cardKey, $cardConfig, $dbKey="app",$params=[]) {
+		$colorArr = [
+			"red" => 'rgb(255, 99, 132)',
+			"orange" => 'rgb(255, 159, 64)',
+			"yellow" => 'rgb(255, 205, 86)',
+			"green" => 'rgb(75, 192, 192)',
+			"blue" => 'rgb(54, 162, 235)',
+			"purple" => 'rgb(153, 102, 255)',
+			"grey" => 'rgb(201, 203, 207)',
+
+			"clr_1" => '#4dc9f6',
+			"pink" => '#f67019',
+			"darkblue" => '#f53794',
+			"lightgreen" => '#537bc4',
+			"darkblue" => '#acc236',
+			"clr_6" => '#166a8f',
+			"clr_7" => '#00a950',
+			"clr_8" => '#58595b',
+			"clr_9" => '#8549ba'
+		];
+		$colorKeys = array_keys($colorArr);
+
+		if(!isset($cardConfig['height'])) $cardConfig['height'] = "300px";
+
 		if(isset($cardConfig['type'])) {
 			$cardFile = __DIR__."/cards/{$cardConfig['type']}.php";
 			if(file_exists($cardConfig['type'])) {
@@ -235,6 +292,97 @@ if(!function_exists("findInfovisual")) {
 			}
 
 		}
+	}
+
+	function fetchCardData($cardConfig, $dbKey="app") {
+		$cardData = false;
+
+		if(isset($cardConfig['source']) && is_array($cardConfig['source']) && count($cardConfig['source'])>0) {
+			foreach ($cardConfig['source'] as $kn => $source) {
+				$cardDBKey = $dbKey;
+				if(isset($source['dbkey'])) $cardDBKey = $source['dbkey'];
+
+				$dbData = _db($cardDBKey)->queryBuilder()->fromJSON(json_encode($source),_db($cardDBKey));
+				if($dbData) {
+					$tempData = $dbData->_GET();
+
+					if($tempData) {
+						if(!$cardData) $cardData = [];
+						$cardData[$kn] = $tempData;
+					}
+				}
+			}
+		}
+
+		return $cardData;
+	}
+
+	function createInfovisualCardButtons($cardConfig) {
+		$html = "";
+		foreach ($cardConfig['actions'] as $key => $button) {
+          if(isset($button['policy']) && strlen($button['policy'])>0) {
+            $allow=checkUserPolicy($button['policy']);
+            if(!$allow) continue;
+          }
+//           printArray($button);printArray();checkUserRoles($cardConfig['srckey'],);
+          if(isset($button['label'])) $button['label']=_ling($button['label']);
+          else $button['label']=_ling($key);
+          
+          if(isset($button['title'])) $button['title']=_ling($button['title']);
+          else $button['title']="";
+
+          if(strlen($button['title'])<=0) $button['title'] = $button['label'];
+
+          if(!isset($button['class'])) $button['class']="";
+          $html .="<a class='actionCMD btn btn-cardtool {$button['class']}' data-cmd='{$key}' title='{$button['title']}' >";
+          if(isset($button['icon']) && strlen($button['icon'])>0) {
+            if(strpos($button['icon'],"<")!==false) {
+              $html .=$button['icon'];
+            } else {
+              $html .="<i class='{$button['icon']}'></i> ";
+            }
+          }
+          // $html .=" <span class='btn-label'>{$button['label']}</span>";
+          $html .="</a>";
+        }
+        return $html;
+	}
+
+	function createInfovisualRecordAction($button, $record) {
+		if(isset($button['policy']) && strlen($button['policy'])>0) {
+			$allow=checkUserPolicy($button['policy']);
+			if(!$allow) return "";
+		}
+		
+		$cmd=$button['cmd'];
+		
+		if(!isset($button['icon'])) return;
+		if(!isset($button['label'])) $button['label']="";
+		if(!isset($button['class'])) $button['class']="";
+		
+		$button['label']=_ling($button['label']);
+		
+		$_ENV['REPORTRECORD']=$record;
+		$_ENV['REPORTRECORD']['hashid']="";
+		
+		if(!empty($record)) {
+			if(isset($record['hashid'])) $_ENV['REPORTRECORD']['hashid']=$record['hashid'];
+			elseif(isset($record['id'])) $_ENV['REPORTRECORD']['hashid']=md5($record['id']);
+			else {
+				$_ENV['REPORTRECORD']['hashid']=md5($record[array_keys($record)[0]]);
+			}
+		}
+		$cmd=preg_replace_callback('/{(.*?)}/', function($matches) {
+			$colName=substr($matches[0],1,strlen($matches[0])-2);
+			if(isset($_ENV['REPORTRECORD'][$colName])) {
+				if(is_numeric($_ENV['REPORTRECORD'][$colName])) return md5($_ENV['REPORTRECORD'][$colName]);
+				return $_ENV['REPORTRECORD'][$colName];
+			}
+			return "";
+		}, $cmd);
+		if(isset($_ENV['REPORTRECORD'])) unset($_ENV['REPORTRECORD']);
+
+		return "<i class='actionCMD {$button['icon']} {$button['class']}' data-cmd='{$cmd}' title='{$button['label']}'></i>";
 	}
 }
 

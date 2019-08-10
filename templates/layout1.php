@@ -5,10 +5,10 @@ if(!defined('ROOT')) exit('No direct script access allowed');
 ?>
 <div id='INFOVISUALS-<?=$infovisualkey?>' data-rptkey='<?=$infovisualkey?>' class='col-xs-12 col-sm-12 col-md-12 col-lg-12 infovisuals-main-container'>
 
-	<div class="row infovisuals-tools noprint">
-      	<?php
-			include_once dirname(__DIR__)."/comps/topbar.php";
-		?>
+    <div class="row infovisuals-tools noprint">
+      <?php
+			 include_once dirname(__DIR__)."/comps/topbar.php";
+		  ?>
     </div>
 
     <div class='cardsContainer infovisualsContainer'>

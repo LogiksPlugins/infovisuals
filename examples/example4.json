@@ -1,0 +1,101 @@
+{
+	"schema": "1.0",
+	"type":"infovisuals",
+	"title": "My Leave Applications",
+	"category": "personal",
+	"privilege": "*",
+	"blocked": false,
+	"custombar": false,
+	"hooks": {
+		
+	},
+	"actions": {
+		"forms@errands/new": {
+			"label": "New Errand",
+			"icon": "fa fa-plus",
+			"class": "btn btn-info"
+		}
+	},
+    "buttons":{
+       "infoview@errands/{hashid}": {
+			"label": "View Errands",
+			"icon": "fa fa-eye",
+			"class": "leads-lead"
+		},
+       "forms@errands/edit/{hashid}": {
+			"label": "Edit Errand",
+			"icon": "fa fa-pencil"
+		}
+    },
+	"cards":[
+        {
+        	"type": "charts_polar",
+        	"column":4,
+        	"js":"charts",
+        	"title":"CHARTS Polar",
+        	"source": [{
+        	    "title": "By Type",
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, count(*) as value",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	}]
+        },
+        {
+        	"type": "charts_scatter",
+        	"column":4,
+        	"js":"charts",
+        	"title":"CHARTS Scatter",
+        	"source": [{
+        	    "title": "By Type",
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, count(*) as xaxis, count(*) as yaxis",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	},{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, (count(*)+10) as xaxis, (count(*)+20) as yaxis",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	}]
+        },
+        {
+        	"type": "charts_bubble",
+        	"column":4,
+        	"js":"charts",
+        	"title":"CHARTS Bubble",
+        	"source": [{
+        	    "title": "By Type",
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, count(*) as xaxis, count(*) as yaxis",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	},{
+        		"type": "sql",
+        		"table": "profiletbl",
+        		"cols": "profiletbl.type as title, (count(*)+10) as xaxis, (count(*)+20) as yaxis",
+        		"where": {
+        			"blocked": "false",
+        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+        		},
+        		"groupby": "type"
+        	}]
+        }
+    ]
+}
