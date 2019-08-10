@@ -1,116 +1,142 @@
 {
-	"schema": "1.0",
-	"type":"infovisuals",
-	"title": "Example 2",
-	"category": "personal",
-	"privilege": "*",
-	"blocked": false,
-	"custombar": false,
-	"hooks": {
-		
-	},
-	"actions": {
-		"forms@errands/new": {
-			"label": "New Errand",
-			"icon": "fa fa-plus",
-			"class": "btn btn-info"
-		}
-	},
+    "schema": "1.0",
+    "type":"infovisuals",
+    "title": "Example 2",
+    "category": "personal",
+    "privilege": "*",
+    "blocked": false,
+    "custombar": false,
+    "hooks": {
+        
+    },
+    "actions": {
+        "forms@errands/new": {
+            "label": "New Errand",
+            "icon": "fa fa-plus",
+            "class": "btn btn-info"
+        }
+    },
     "buttons":{
        "infoview@errands/{hashid}": {
-			"label": "View Errands",
-			"icon": "fa fa-eye",
-			"class": "leads-lead"
-		},
+            "label": "View Errands",
+            "icon": "fa fa-eye",
+            "class": "leads-lead"
+        },
        "forms@errands/edit/{hashid}": {
-			"label": "Edit Errand",
-			"icon": "fa fa-pencil"
-		}
+            "label": "Edit Errand",
+            "icon": "fa fa-pencil"
+        }
     },
-	"cards":[
-	    {
-	        "type": "custom",
-        	"column":4,
-        	"title":"Custom 1",
-        	"source":"plugins/widgets/test.php"
-	    },
+    "cards":[
         {
-        	"type": "text",
-        	"column":2,
-        	"title":"TEXT 1",
-        	"newrow":true,
-        	"height":"auto",
-        	"actions": {
-        		"forms@profile.addressbook/new": {
-        			"label": "Add Contact",
-        			"icon": "fa fa-user"
-        		}
-        	},
-        	"content":"Hello WOrld asd askd askjdas ds dasd asgd asd asdk asjkd kasdk askd jkasdkas kdaskd aksjd kjasdka skda skdkaskdj askdhkas"
+            "type": "data_numbers",
+            "column":2,
+            "iconclass":"fa fa-flag pull-left  fa-4x",
+            "bodyclass":"alert alert-success",
+            "content":"<h2>126</h2>",
+            "height":200
         },
         {
-        	"type": "text",
-        	"column":2,
-        	"title":"TEXT 2",
-        	"actions": {
-        		"forms@profile.main/new": {
-        			"label": "Add Business",
-        			"icon": "fa fa-add"
-        		},
-        		"forms@profile.addressbook/new": {
-        			"label": "Add Contact",
-        			"icon": "fa fa-user"
-        		}
-        	},
-        	"source": [{
-        		"type": "sql",
-        		"table": "profiletbl",
-        		"cols": "full_name as text",
-        		"where": {
-        			"blocked": "false",
-        			"type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
-        		},
-        		"groupby": "type",
-        		"limit":2
-        	}]
+            "type": "data_numbers",
+            "column":2,
+            "height":200,
+            "iconclass":"fa fa-users pull-left  fa-4x",
+            "bodyclass":"alert alert-danger",
+            "source": [{
+                "type": "sql",
+                "table": "profiletbl",
+                "cols": "count(*) as value, type as title1",
+                "where": {
+                    "blocked": "false",
+                    "type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+                },
+                "groupby": "type",
+                "limit":1
+            }]
         },
         {
-        	"type": "iframe",
-        	"column":4,
-        	"title":"IFRAME 1",
-        	"content":"https://www.smartinfologiks.com"
+            "type": "custom",
+            "column":8,
+            "title":"Custom 1",
+            "source":"plugins/widgets/test.php"
         },
         {
-        	"type": "embeded",
-        	"column":4,
-        	"title":"Embded",
-        	"content":"<iframe width='100%' height='100%' src='https://www.youtube.com/embed/Dc3BjvTRq3A' frameborder=0 allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "type": "text",
+            "column":2,
+            "title":"TEXT 1",
+            "newrow":true,
+            "height":"auto",
+            "actions": {
+                "forms@profile.addressbook/new": {
+                    "label": "Add Contact",
+                    "icon": "fa fa-user"
+                }
+            },
+            "content":"Hello WOrld asd askd askjdas ds dasd asgd asd asdk asjkd kasdk askd jkasdkas kdaskd aksjd kjasdka skda skdkaskdj askdhkas"
         },
         {
-        	"type": "images",
-        	"column":4,
-        	"title":"IMAGES 1",
-        	"content":"http://odishafest.com/beta/images/background/fest1.jpg"
+            "type": "text",
+            "column":2,
+            "title":"TEXT 2",
+            "actions": {
+                "forms@profile.main/new": {
+                    "label": "Add Business",
+                    "icon": "fa fa-add"
+                },
+                "forms@profile.addressbook/new": {
+                    "label": "Add Contact",
+                    "icon": "fa fa-user"
+                }
+            },
+            "source": [{
+                "type": "sql",
+                "table": "profiletbl",
+                "cols": "full_name as text",
+                "where": {
+                    "blocked": "false",
+                    "type IS NOT NULL AND length(type)>0 AND length(type)<10": "RAW"
+                },
+                "groupby": "type",
+                "limit":2
+            }]
         },
         {
-        	"type": "images",
-        	"column":4,
-        	"title":"IMAGES 2",
-        	"content":[
-        	    "https://image.shutterstock.com/image-vector/touch-futureinterface-technology-future-user-260nw-503854255.jpg",
-        	    "https://www.gsa.gov/cdnstatic/getMediaDatamediaId168142.jpg",
-        	    "https://static-news.moneycontrol.com/static-mcnews/2017/04/Technology_Tech_software_computer_1280-770x433.jpg"
-        	]
+            "type": "iframe",
+            "column":4,
+            "title":"IFRAME 1",
+            "content":"https://www.smartinfologiks.com"
         },
         {
-        	"type": "gallery",
-        	"column":4,
-        	"title":"IMAGES 2",
-        	"content":[
-        	    "https://image.shutterstock.com/image-vector/touch-futureinterface-technology-future-user-260nw-503854255.jpg",
-        	    "https://www.gsa.gov/cdnstatic/getMediaDatamediaId168142.jpg",
-        	    "https://static-news.moneycontrol.com/static-mcnews/2017/04/Technology_Tech_software_computer_1280-770x433.jpg"
-        	]
+            "type": "embeded",
+            "column":4,
+            "title":"Embded",
+            "content":"<iframe width='100%' height='100%' src='https://www.youtube.com/embed/Dc3BjvTRq3A' frameborder=0 allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+        },
+        {
+            "type": "images",
+            "column":4,
+            "title":"IMAGES 1",
+            "content":"http://odishafest.com/beta/images/background/fest1.jpg"
+        },
+        {
+            "type": "images",
+            "column":4,
+            "title":"IMAGES 2",
+            "content":[
+                "https://image.shutterstock.com/image-vector/touch-futureinterface-technology-future-user-260nw-503854255.jpg",
+                "https://www.gsa.gov/cdnstatic/getMediaDatamediaId168142.jpg",
+                "https://static-news.moneycontrol.com/static-mcnews/2017/04/Technology_Tech_software_computer_1280-770x433.jpg"
+            ]
+        },
+        {
+            "type": "gallery",
+            "column":4,
+            "title":"IMAGES 2",
+            "content":[
+                "https://image.shutterstock.com/image-vector/touch-futureinterface-technology-future-user-260nw-503854255.jpg",
+                "https://www.gsa.gov/cdnstatic/getMediaDatamediaId168142.jpg",
+                "https://static-news.moneycontrol.com/static-mcnews/2017/04/Technology_Tech_software_computer_1280-770x433.jpg"
+            ]
         }
     ]
 }

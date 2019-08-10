@@ -43,7 +43,9 @@ canvas {
     padding: 10px;
     margin: 0px;
 }
-
+.infovisualsContainer .infovisualBox .well {
+    margin-bottom: 0px;
+}
 
 .infovisualsContainer .infovisualBox .infovisualCard caption {
     padding-left: 8px;
